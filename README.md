@@ -1,17 +1,9 @@
 # Backend Jus 9 API
 
-## Repertório
+Repertório: `backend-jus9-api`
 
-`backend-jus9-api`
+Status: novo/técnico
 
-## Status
+Mão na Massa Final — padrão visual, assinatura, governança e orientação obrigatória.
 
-novo
-
-## Fase
-
-Pré-Mão na Massa — Pacote Governança encerrado.
-
-## Finalidade
-
-Cria base do backend principal da Jus 9 para APIs, usuários, clientes, processos, DAJ, documentos, prazos e integração com IA.
+© Jus 9 Tecnologia Jurídica — software livre, autoria preservada.
