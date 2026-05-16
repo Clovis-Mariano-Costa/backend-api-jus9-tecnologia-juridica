@@ -1,9 +1,11 @@
-# Backend Jus 9 API
+# backend-api-jus9-tecnologia-juridica
 
-Repertório: `backend-jus9-api`
 
-Status: novo/técnico
+## Links institucionais Jus 9 v1.5
 
-Mão na Massa Final — padrão visual, assinatura, governança e orientação obrigatória.
-
-© Jus 9 Tecnologia Jurídica — software livre, autoria preservada.
+- [Equipe Jus 9](https://www.jus9tecnologia.com.br/equipe/)
+- [Investidores](https://investimentos.jus9tecnologia.com.br/)
+- [MVP](https://www.jus9tecnologia.com.br/mvp)
+- [Charlie Echo](https://charlieecho.jus9tecnologia.com.br/)
+- [Charlie Echo Social](https://jus9verde.jus9tecnologia.com.br/charlie-echo-social)
+- [Contato](mailto:clovis@jus9tecnologia.com.br)
