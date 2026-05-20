@@ -1,0 +1,44 @@
+{
+  "name": "jus9-backend-local",
+  "version": "0.1.0",
+  "description": "Integra a API local inicial da Jus 9 Tecnologia Juridica em localhost.",
+  "author": {
+    "name": "Jus 9 Tecnologia Juridica",
+    "email": "charliefox@jus9tecnologia.com.br",
+    "url": "https://www.jus9tecnologia.com.br/"
+  },
+  "homepage": "http://127.0.0.1:3000/api/manifest",
+  "repository": "https://github.com/",
+  "license": "UNLICENSED",
+  "keywords": [
+    "jus9",
+    "backend",
+    "localhost",
+    "governanca",
+    "whatsapp",
+    "email"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Jus 9 Backend Local",
+    "shortDescription": "API local governada da Jus 9 em localhost.",
+    "longDescription": "Plugin local para orientar o uso da API Jus 9 Backend Local, com rotas de saude, repositorios, prontidao backend, WhatsApp governado e status de e-mail Echo/Fox. Uso restrito ao computador do Fundador.",
+    "developerName": "Jus 9 Tecnologia Juridica",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Local API",
+      "Read"
+    ],
+    "websiteURL": "https://www.jus9tecnologia.com.br/",
+    "privacyPolicyURL": "https://www.jus9tecnologia.com.br/",
+    "termsOfServiceURL": "https://www.jus9tecnologia.com.br/",
+    "defaultPrompt": [
+      "Verifique a saude da API Jus 9 local.",
+      "Liste a prontidao backend do ecossistema.",
+      "Confira status governado de WhatsApp e e-mail."
+    ],
+    "brandColor": "#0F172A"
+  }
+}

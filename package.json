@@ -1,0 +1,12 @@
+{
+  "name": "backend-api-jus9-tecnologia-juridica",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend local inicial da Jus 9 Tecnologia Juridica.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "license": "UNLICENSED"
+}

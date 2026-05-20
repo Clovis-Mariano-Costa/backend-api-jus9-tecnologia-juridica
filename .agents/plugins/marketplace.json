@@ -1,0 +1,20 @@
+{
+  "name": "jus9-local-marketplace",
+  "interface": {
+    "displayName": "Jus 9 Local"
+  },
+  "plugins": [
+    {
+      "name": "jus9-backend-local",
+      "source": {
+        "source": "local",
+        "path": "./plugins/jus9-backend-local"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
