@@ -7,5 +7,7 @@ build/
 .cache/
 .wrangler/
 *.log
+BACKEND/logs/
+BACKEND/logs-test/
 *.zip
 .DS_Store
