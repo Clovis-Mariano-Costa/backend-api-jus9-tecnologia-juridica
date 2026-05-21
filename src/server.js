@@ -11,6 +11,13 @@ const whatsappRoot =
   process.env.JUS9_WHATSAPP_DIR ||
   "G:\\Meu Drive\\Compartilhada\\Equipe Jus 9\\Acesso I.A secreta";
 const publicAccessToken = process.env.JUS9_PUBLIC_ACCESS_TOKEN || "";
+const localCorsOrigins = new Set([
+  "http://127.0.0.1:8787",
+  "http://127.0.0.1:8788",
+  "http://localhost:8787",
+  "http://localhost:8788",
+  "null"
+]);
 const protectedRoutes = new Set([
   "/api/repos",
   "/api/backend/readiness",
@@ -26,6 +33,17 @@ function sendJson(res, statusCode, payload) {
     "Cache-Control": "no-store"
   });
   res.end(body);
+}
+
+function applyCors(req, res) {
+  const origin = req.headers.origin || "";
+  if (localCorsOrigins.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Max-Age", "600");
 }
 
 function notFound(res) {
@@ -255,6 +273,16 @@ function openApiSpec() {
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url || "/", `http://${host}:${port}`);
+
+  applyCors(req, res);
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(204, {
+      "Cache-Control": "no-store"
+    });
+    res.end();
+    return;
+  }
 
   if (req.method !== "GET") {
     sendJson(res, 405, {
