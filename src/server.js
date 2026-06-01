@@ -1,4 +1,5 @@
 import http from "node:http";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -31,6 +32,8 @@ const protectedRoutes = new Set([
   "/api/drive/status",
   "/api/drive/watch-plan",
   "/api/drive/metadata-scan",
+  "/api/integrations/readiness",
+  "/api/manifest",
   "/api/openapi.json"
 ]);
 const maxJsonBodyBytes = 32 * 1024;
@@ -75,11 +78,23 @@ function notFound(res) {
 
 function isAuthorized(req) {
   if (!publicAccessToken) {
-    return true;
+    return isLoopbackHost(host);
   }
 
   const authHeader = req.headers.authorization || "";
-  return authHeader === `Bearer ${publicAccessToken}`;
+  const expected = Buffer.from(`Bearer ${publicAccessToken}`);
+  const received = Buffer.from(authHeader);
+  return received.length === expected.length && crypto.timingSafeEqual(received, expected);
+}
+
+function isLoopbackHost(value) {
+  return new Set(["127.0.0.1", "localhost", "::1"]).has(String(value || "").trim().toLowerCase());
+}
+
+function assertExposurePolicy() {
+  if (!isLoopbackHost(host) && !publicAccessToken) {
+    throw new Error("Exposicao externa recusada: configure JUS9_PUBLIC_ACCESS_TOKEN antes de usar HOST fora de localhost.");
+  }
 }
 
 function exists(targetPath) {
@@ -943,6 +958,8 @@ const server = http.createServer(async (req, res) => {
 
   notFound(res);
 });
+
+assertExposurePolicy();
 
 server.listen(port, host, () => {
   console.log(`Jus 9 backend local em http://${host}:${port}`);
