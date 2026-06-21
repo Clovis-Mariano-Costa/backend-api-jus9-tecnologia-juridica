@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import net from "node:net";
 import test from "node:test";
@@ -85,5 +88,28 @@ test("exposicao externa exige bearer token quando autorizada", async () => {
     assert.equal(response.status, 200);
   } finally {
     await stopServer(server.child);
+  }
+});
+
+test("metadata scan bloqueia COFRE_NAO_AUTOMATICO para leitura ou listagem", async () => {
+  const port = await freePort();
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "jus9-drive-"));
+  const cofre = path.join(root, "04_COFRE_NAO_AUTOMATICO");
+  fs.mkdirSync(cofre);
+  const server = startServer({ HOST: "127.0.0.1", PORT: String(port), JUS9_PUBLIC_ACCESS_TOKEN: "" });
+  try {
+    await waitForServer(`http://127.0.0.1:${port}/api/health`);
+    const response = await fetch(`http://127.0.0.1:${port}/api/drive/metadata-scan`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rootPath: cofre, actor: "teste-regressao-cofre" })
+    });
+    const payload = await response.json();
+    assert.equal(response.status, 400);
+    assert.equal(payload.ok, false);
+    assert.match(payload.error, /rootPath sensivel/);
+  } finally {
+    await stopServer(server.child);
+    fs.rmSync(root, { recursive: true, force: true });
   }
 });

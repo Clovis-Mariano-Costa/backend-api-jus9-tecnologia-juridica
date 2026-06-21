@@ -374,6 +374,7 @@ function driveStatus() {
       "ler metadados antes de qualquer conteudo",
       "nao copiar, mover, apagar ou publicar arquivos automaticamente",
       "marcar cofre, WhatsApp bruto, documentos pessoais, tokens e senhas como requer decisao do Fundador",
+      "COFRE_NAO_AUTOMATICO permite apenas escrita governada por decisao humana; leitura, listagem e publicacao seguem bloqueadas",
       ".gdoc, .gsheet e .gslides exigem conector Google autorizado para leitura de conteudo",
       "webhook real do Drive exige HTTPS publico, OAuth e renovacao de canais"
     ],
