@@ -2,6 +2,8 @@ import http from "node:http";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { dataJudReadiness } from "./integrations/datajud/client.js";
+import { handleDataJudRoute, isDataJudRoute } from "./integrations/datajud/datajud.routes.js";
 
 const host = process.env.HOST || "127.0.0.1";
 const port = Number.parseInt(process.env.PORT || "3000", 10);
@@ -33,6 +35,9 @@ const protectedRoutes = new Set([
   "/api/drive/watch-plan",
   "/api/drive/metadata-scan",
   "/api/integrations/readiness",
+  "/api/judicial/datajud/readiness",
+  "/api/judicial/datajud/tribunais",
+  "/api/judicial/datajud/search",
   "/api/manifest",
   "/api/openapi.json"
 ]);
@@ -85,6 +90,10 @@ function isAuthorized(req) {
   const expected = Buffer.from(`Bearer ${publicAccessToken}`);
   const received = Buffer.from(authHeader);
   return received.length === expected.length && crypto.timingSafeEqual(received, expected);
+}
+
+function isProtectedRoute(pathname) {
+  return protectedRoutes.has(pathname) || pathname.startsWith("/api/judicial/datajud/processos/");
 }
 
 function isLoopbackHost(value) {
@@ -502,8 +511,10 @@ function integrationReadiness() {
       },
       {
         name: "DataJud CNJ",
-        status: "planned",
-        nextStep: "contrato de consulta por numero CNJ e vinculacao ao DAJ"
+        status: dataJudReadiness().status,
+        nextStep: dataJudReadiness().status === "configured"
+          ? "executar consulta controlada com processo publico e vincular ao DAJ"
+          : "configurar DATAJUD_API_KEY no ambiente seguro"
       }
     ]
   };
@@ -623,6 +634,10 @@ function apiManifest() {
       { method: "GET", path: "/api/drive/status", purpose: "verificar prontidao do Drive governado" },
       { method: "GET", path: "/api/drive/watch-plan", purpose: "descrever plano seguro de webhook Drive" },
       { method: "POST", path: "/api/drive/metadata-scan", purpose: "listar metadados locais do Drive sem ler conteudo" },
+      { method: "GET", path: "/api/judicial/datajud/readiness", purpose: "verificar prontidao do conector DataJud CNJ" },
+      { method: "GET", path: "/api/judicial/datajud/tribunais", purpose: "listar aliases DataJud habilitados" },
+      { method: "GET", path: "/api/judicial/datajud/processos/:numeroCnj", purpose: "consultar metadados oficiais por numero CNJ" },
+      { method: "POST", path: "/api/judicial/datajud/search", purpose: "consultar DataJud com payload controlado" },
       { method: "GET", path: "/api/integrations/readiness", purpose: "listar proximas integracoes oficiais" },
       { method: "GET", path: "/api/manifest", purpose: "descrever a API local da Jus 9" },
       { method: "GET", path: "/api/openapi.json", purpose: "fornecer especificacao OpenAPI local" }
@@ -711,6 +726,58 @@ function openApiSpec() {
           }
         }
       },
+      "/api/judicial/datajud/readiness": {
+        get: {
+          summary: "Prontidao do conector DataJud CNJ",
+          responses: { 200: { description: "Status configured, missing-key, disabled ou error" } }
+        }
+      },
+      "/api/judicial/datajud/tribunais": {
+        get: {
+          summary: "Aliases DataJud habilitados",
+          responses: { 200: { description: "Lista de tribunais/aliases sem segredos" } }
+        }
+      },
+      "/api/judicial/datajud/processos/{numeroCnj}": {
+        get: {
+          summary: "Consulta DataJud por numero CNJ",
+          parameters: [
+            { name: "numeroCnj", in: "path", required: true, schema: { type: "string" } },
+            { name: "tribunal", in: "query", required: false, schema: { type: "string" } }
+          ],
+          responses: {
+            200: { description: "Metadados oficiais normalizados" },
+            400: { description: "Parametros invalidos" },
+            503: { description: "DataJud indisponivel, desabilitado ou sem API key" }
+          }
+        }
+      },
+      "/api/judicial/datajud/search": {
+        post: {
+          summary: "Consulta DataJud com payload controlado",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    numeroProcesso: { type: "string" },
+                    tribunal: { type: "string" },
+                    size: { type: "integer", minimum: 1, maximum: 10 }
+                  },
+                  required: ["numeroProcesso"]
+                }
+              }
+            }
+          },
+          responses: {
+            200: { description: "Metadados oficiais normalizados" },
+            400: { description: "Parametros invalidos" },
+            503: { description: "DataJud indisponivel, desabilitado ou sem API key" }
+          }
+        }
+      },
       "/api/integrations/readiness": {
         get: {
           summary: "Prontidao das integracoes",
@@ -754,10 +821,20 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (protectedRoutes.has(url.pathname) && !isAuthorized(req)) {
+  if (isProtectedRoute(url.pathname) && !isAuthorized(req)) {
     sendJson(res, 401, {
       ok: false,
       error: "Autorizacao necessaria"
+    });
+    return;
+  }
+
+  if (isDataJudRoute(url.pathname)) {
+    await handleDataJudRoute(req, res, url, {
+      sendJson,
+      readJsonBody,
+      appendAudit,
+      env: process.env
     });
     return;
   }

@@ -28,9 +28,17 @@ Rotas principais:
 - `POST /api/agenda/events`
 - `GET /api/drive/status`
 - `POST /api/drive/metadata-scan`
+- `GET /api/judicial/datajud/readiness`
+- `GET /api/judicial/datajud/tribunais`
+- `GET /api/judicial/datajud/processos/:numeroCnj`
+- `POST /api/judicial/datajud/search`
 - `GET /api/integrations/readiness`
 - `GET /api/manifest`
 - `GET /api/openapi.json`
+
+## DataJud/CNJ
+
+A Fase 1 do conector DataJud e apenas leitura de metadados processuais publicos. Nao acessa autos, documentos, sigilo, peticionamento, ciencia ou protocolo. Configure `DATAJUD_API_KEY` somente em ambiente seguro; sem chave, o readiness retorna `missing-key`.
 
 ## Links institucionais Jus 9
 
