@@ -10,20 +10,19 @@
 
 - [x] PR #13 aberto como rascunho para o contrato e protocolo do chat em nuvem.
 - [x] Contrato de mensagem e testes de unidade propostos no branch `feat/farol-cloud-chat-protocol`.
-- [ ] Executar e registrar a suíte `npm test` neste branch. Não há execução confirmada para o commit atual.
-- [ ] Revisão humana e de segurança; PR #13 não está mesclado nem implantado.
+- [x] CI GitHub Actions executou `npm test` em Node.js 22 e passou no commit `cb0ced3ed3ef38e31028c9c48b8b5c192cab994c`; execução: https://github.com/Clovis-Mariano-Costa/backend-api-jus9-tecnologia-juridica/actions/runs/38807740056
+- [ ] Revisão humana e de segurança; PR #13 permanece rascunho, aberto, não mesclado e não implantado.
 - [ ] Nenhum canal real com Gemini/Vertex ou Reitora está confirmado.
 - [ ] Nenhuma transferência de containers para Charlie Echo está confirmada.
 
 ## Ordem de execução — sem duplicar processo
 
 ### 1. Motor e testes do backend — issue #7
-- Inspecionar os testes existentes e a política de exposição.
-- Executar `npm test` em ambiente de desenvolvimento controlado.
-- Registrar versão do Node.js, comando, saída integral, resultado e falhas.
-- Corrigir falhas reproduzíveis em branch de trabalho; não declarar sucesso sem saída verificável.
+- [x] A suíte foi executada por GitHub Actions com Node.js 22 e `npm test` no commit acima.
+- [ ] Revisar cobertura, política de exposição e lacunas entre testes locais e ambiente de produção.
+- [ ] Analisar o contrato do chat para garantir que estados e identidade não sejam confundidos com autenticação real.
 
-**Saída exigida:** execução identificável e resultado dos testes anexado ao PR ou issue.
+**Evidência:** execução de CI vinculada ao commit; isso não equivale a revisão de segurança nem a implantação.
 
 ### 2. CI, segredos e portabilidade — issue #9 / PR #12
 - Revisar o workflow e confirmar que o CI cobre a suíte atual, inclusive os testes novos.
