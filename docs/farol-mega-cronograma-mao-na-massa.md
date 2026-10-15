@@ -10,7 +10,9 @@
 
 - [x] PR #13 aberto como rascunho para o contrato e protocolo do chat em nuvem.
 - [x] Contrato de mensagem e testes de unidade propostos no branch `feat/farol-cloud-chat-protocol`.
-- [x] CI GitHub Actions executou `npm test` em Node.js 22 e passou no commit `cb0ced3ed3ef38e31028c9c48b8b5c192cab994c`; execução: https://github.com/Clovis-Mariano-Costa/backend-api-jus9-tecnologia-juridica/actions/runs/38807740056
+- [x] PR #12 CI: 18 testes aprovados, 0 falhas; execução #38773829990: https://github.com/Clovis-Mariano-Costa/backend-api-jus9-tecnologia-juridica/actions/runs/38773829990
+- [x] PR #13 branch CI: 23 testes aprovados, 0 falhas no commit `0107613df5228c1684f32f7c9c019587d8ad0076`; execução #38808135074: https://github.com/Clovis-Mariano-Costa/backend-api-jus9-tecnologia-juridica/actions/runs/38808135074
+- [ ] Avisos de manutenção no log: depreciação `punycode` e actions `checkout@v4`/`setup-node@v4` sobre runtime Node.js 20 forçado a Node.js 24 pelo runner; avaliar atualização controlada.
 - [ ] Revisão humana e de segurança; PR #13 permanece rascunho, aberto, não mesclado e não implantado.
 - [ ] Nenhum canal real com Gemini/Vertex ou Reitora está confirmado.
 - [ ] Nenhuma transferência de containers para Charlie Echo está confirmada.
@@ -27,7 +29,8 @@
 ### 2. CI, segredos e portabilidade — issue #9 / PR #12
 - Revisar o workflow e confirmar que o CI cobre a suíte atual, inclusive os testes novos.
 - Manter segredos fora do repositório; usar apenas valores sintéticos em testes.
-- PR #12 segue aberto até revisão e decisão humana; CI anterior bem-sucedido não comprova o PR #13.
+- PR #12 segue aberto, não mesclado e sem review submetida retornada pela API; o CI verde não substitui revisão humana.
+- A execução de PR #13 é separada e não representa aprovação ou merge de qualquer PR.
 
 **Saída exigida:** execução de CI vinculada ao commit correto e revisão registrada.
 
@@ -58,6 +61,6 @@ Em cada ciclo, registrar **feito**, **pendente**, **bloqueado** e **evidência**
 
 ## Próxima ação imediata
 
-Executar `npm test` no branch `feat/farol-cloud-chat-protocol`, guardar a saída e corrigir qualquer falha antes de integrar rotas ou habilitar comunicação externa. Se o ambiente de execução não estiver disponível, registrar explicitamente essa limitação e preparar a execução no CI; não simular um resultado.
+Obter revisão humana no PR #12 e revisão de segurança do PR #13. Conferir validação defensiva do envelope/histórico, autenticação e autorização no servidor, persistência/idempotência entre instâncias, recibos verificáveis e política de logs. Em paralelo, avaliar aviso de runtime das GitHub Actions. Manter adapters externos desabilitados até autorização explícita.
 
 **Estado deste documento:** protocolo de execução versionado; não é evidência de que as ações pendentes foram executadas.
