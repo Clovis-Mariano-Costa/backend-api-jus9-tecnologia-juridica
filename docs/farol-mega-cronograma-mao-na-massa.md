@@ -64,3 +64,31 @@ Em cada ciclo, registrar **feito**, **pendente**, **bloqueado** e **evidência**
 Obter revisão humana no PR #12 e revisão de segurança do PR #13. Conferir validação defensiva do envelope/histórico, autenticação e autorização no servidor, persistência/idempotência entre instâncias, recibos verificáveis e política de logs. Em paralelo, avaliar aviso de runtime das GitHub Actions. Manter adapters externos desabilitados até autorização explícita.
 
 **Estado deste documento:** protocolo de execução versionado; não é evidência de que as ações pendentes foram executadas.
+
+
+## Delta de continuidade — 22/10/2026 — ORQ-R3-02
+
+Este adendo complementa o cronograma original; não apaga estados históricos nem declara concluídas as pendências que continuam abertas.
+
+### Revalidação dos PRs/CI nesta consulta
+- PR #12: OPEN / não mesclado; HEAD `ced2b32597c2ba93cf6f77780dc7b220f742ba62`. A execução #38773829990 está `completed/success` para esse HEAD. Isso comprova o resultado da execução indicada, não revisão humana nem segurança completa.
+- PR #13: OPEN / DRAFT / não mesclado; HEAD `5e6973829ecb5e2599dff6dc31d14a61fd4797bc`. A execução #38808385290 está `completed/success` para esse HEAD. Contrato/testes sintéticos não provam autenticação, persistência real, entrega externa ou implantação.
+- Revisores solicitados: zero em ambos os PRs na consulta atual; revisão humana independente continua pendente.
+- Avisos de manutenção de Actions/runtime permanecem como tarefa separada; nenhuma atualização do workflow foi executada neste adendo.
+
+### Frente Teste Mudança — resultados cruzados, somente laboratório
+- Onda 02 CT-007/CT-008: cópia local isolada dos blobs recuperados executou baseline PASS, compilação de sintaxe PASS e teste negativo PASS; evidência proposta no laboratório: https://github.com/Jus-9/testes-mudanca/pull/45 (OPEN / DRAFT, não mesclado).
+- FAROL R1: a cópia local do HEAD examinado reproduziu 9/9 testes; dois testes adversariais demonstraram referência mutável e autodeclaração de `verified`. O patch proposto passou 15/15 testes e `py_compile` local; PR corretivo empilhado: https://github.com/Jus-9/testes-mudanca/pull/43 (OPEN / DRAFT, CI remoto e revisão independente pendentes).
+- Nenhum merge/deploy foi executado por esta revisão. Os PRs #36 e #38 do laboratório foram observados como mesclados em 22/10/2026; isso é registro de estado externo observado, não ação desta sessão.
+
+### Prioridade imediata
+1. Obter revisão independente e CI para o PR #43; manter o PR #1 original em draft e preservar sua branch.
+2. Confirmar checks reais e avaliar rollback Git em ensaio separado, sem dados reais.
+3. Localizar a fonte canônica do Mega Cronograma Uno e o ponteiro histórico de 16/10 antes de declarar ambos os mega cronogramas reconciliados.
+4. Manter integrações externas desabilitadas até identidade/canal, autorização e recibo verificáveis.
+
+### Estado de governança
+- Mega Cronograma desta branch: adendo proposto, aguardando PR/revisão.
+- Mega Cronograma Uno institucional: não localizado; não atualizado.
+- Gate C externo: HOLD.
+- Merge/deploy de produção: não autorizado por este adendo.
